@@ -162,7 +162,7 @@ class ExportIntencionDeporteController extends Fpdf
         // Movernos hacia abajo
         $this->SetY(12);
         //membrete
-        $this->Cell(0, 7, verUtf8('II JUEGOS BOLIVARIANOS DE LA JUVENTUD “CARACAS 2026”'), 0, 1, 'C');
+        $this->Cell(0, 7, verUtf8('II JUEGOS BOLIVARIANOS DE LA JUVENTUD "CARACAS 2026"'), 0, 1, 'C');
         $this->Cell(0, 7, verUtf8('DEPORTES - MODALIDADES'), 0, 1, 'C');
         //titulo
         $this->SetFont('Arial', 'B', 15);
