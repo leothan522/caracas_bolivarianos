@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fedeciv-cache-v1';
+const CACHE_NAME = 'caracas-2026-cache-v1';
 
 const PRECACHE_URLS = [
     './favicons/offline.html'
