@@ -12,8 +12,8 @@ trait ReportesFpdf
     function Header(): void
     {
         // Logo
-        $this->Image(asset('img/cintillo.png'), 10, 0);
-        $this->Image(asset('img/logo_juegos.png'), 170, 5, 30, 30);
+        $this->Image(asset('img/mascota.png'), 10, 0, 70, 35);
+        $this->Image(asset('img/Imagen1.png'), 170, 5, 25, 25);
         // Arial bold 15
         $this->SetFont('Arial', 'B', 15);
         // Movernos hacia abajo
@@ -22,11 +22,10 @@ trait ReportesFpdf
         $this->Cell(30);
         // Name APP
         $this->SetTextColor(255);
-        $this->Cell(43, 10, env('APP_NAME', 'Morros Devops'), 0, 0, 'C');
-        $this->Cell(12);
+        $this->Cell(35, 10, '', 0, 0, 'C');
         // Título
         $this->SetTextColor(0);
-        $this->Cell(70, 10, $_SESSION['headerTitle'], 0, 0, 'C');
+        $this->Cell(95, 10, $_SESSION['headerTitle'], 0, 0, 'C');
         // Salto de línea
         $this->Ln(20);
     }
