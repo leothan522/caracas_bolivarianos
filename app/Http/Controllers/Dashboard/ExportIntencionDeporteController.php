@@ -33,10 +33,10 @@ class ExportIntencionDeporteController extends Fpdf
 
             //Cabecera
             $pdf->SetFont('Arial', 'B', 10);
-            $pdf->Cell(40, $altura, 'NOMBRE DEL CLUB:', 1);
+            $pdf->Cell(40, $altura, verUtf8('PAÍS PARTICIPANTE:'), 1);
             $pdf->Cell(150, $altura, $nombreClub, 1, 1, 'C');
-            $pdf->Cell(40, $altura, 'CIUDAD DEL CLUB:', 1);
-            $pdf->Cell(150, $altura, $ciudadClub, 1, 1, 'C');
+            /*$pdf->Cell(40, $altura, 'CIUDAD DEL CLUB:', 1);
+            $pdf->Cell(150, $altura, $ciudadClub, 1, 1, 'C');*/
             $pdf->Ln(5);
 
             //Titulos de Columnas
@@ -137,7 +137,7 @@ class ExportIntencionDeporteController extends Fpdf
             $pdf->Cell(10, $altura, verUtf8($totalFemenino), 1, 0, 'C');
             $pdf->Cell(10, $altura, verUtf8($totalGeneral), 1, 1, 'C');
             $pdf->Ln(14);
-            $pdf->Cell(0, $altura, 'PRESIDENTE / SECRETARIO GENERAL / DELEGADO PRINCIPAL DEL CLUB', 0, 1);
+            $pdf->Cell(0, $altura, verUtf8('JEFE DE MISIÓN'), 0, 1);
 
 
             //Exportamos el PDF
@@ -155,18 +155,18 @@ class ExportIntencionDeporteController extends Fpdf
     function Header(): void
     {
         // Logo
-        $this->Image(asset('img/Imagen1.jpg'), 10, 10, 20, 25);
-        $this->Image(asset('img/Imagen1.jpg'), 180, 10, 20, 25);
+        $this->Image(asset('img/Imagen1.png'), 10, 10, 20, 25);
+        $this->Image(asset('img/Imagen1.png'), 180, 10, 20, 25);
         // Arial bold 15
         $this->SetFont('Arial', 'B', 10);
         // Movernos hacia abajo
         $this->SetY(12);
         //membrete
-        $this->Cell(0, 7, verUtf8('FEDERACIÓN DEPORTIVA DE CLUBES ITALO-VENEZOLANOS'), 0, 1, 'C');
-        $this->Cell(0, 7, verUtf8('XIX JUEGOS DEPORTIVOS NACIONALES INTERCLUBES - 08 al 12 OCTUBRE 2026'), 0, 1, 'C');
+        $this->Cell(0, 7, verUtf8('II JUEGOS BOLIVARIANOS DE LA JUVENTUD “CARACAS 2026”'), 0, 1, 'C');
+        $this->Cell(0, 7, verUtf8('DEPORTES - MODALIDADES'), 0, 1, 'C');
         //titulo
         $this->SetFont('Arial', 'B', 15);
-        $this->Cell(0, 10, verUtf8('PLANILLA DE INTENCIÓN DE PARTICIPACIÓN 2026'), 0, 1, 'C');
+        $this->Cell(0, 10, verUtf8('PLANILLA DE INTENCIÓN DE PARTICIPACIÓN'), 0, 1, 'C');
         // Salto de línea
         $this->Ln(5);
     }
