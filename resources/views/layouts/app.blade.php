@@ -8,11 +8,17 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         {{-- Favicon y PWA --}}
+        <meta name="description" content="Sistema de Inscripciones para los II JUEGOS BOLIVARIANOS DE LA JUVENTUD CARACAS 2026">
+        <meta name="theme-color" content="#0056b3">
+
+        <meta property="og:title" content="CARACAS 2026">
+        <meta property="og:description" content="Sistema de Inscripciones para los II JUEGOS BOLIVARIANOS DE LA JUVENTUD CARACAS 2026">
+        <meta property="og:image" content="{{ asset('favicons/favicon-128x128.png') }}">
+
+        {{-- Favicon y PWA --}}
         <link rel="manifest" href="{{ asset('manifest.json') }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicons/appicon-32x32.png') }}">
-        <link rel="apple-touch-icon" href="{{ asset('favicons/appicon-128x128.png') }}">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicons/favicon-32x32.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('favicons/favicon-128x128.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
