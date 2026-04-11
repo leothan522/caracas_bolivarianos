@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Filament\Http\Responses\Auth\Contracts\LogoutResponse;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(LogoutResponse::class, \App\Http\Responses\LogoutResponse::class);
     }
 
     /**

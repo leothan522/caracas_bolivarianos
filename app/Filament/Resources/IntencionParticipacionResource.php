@@ -3,15 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\IntencionParticipacionResource\Pages;
-use App\Filament\Resources\IntencionParticipacionResource\RelationManagers;
 use App\Models\DeporteOficial;
 use App\Models\Entidad;
-use App\Models\IntencionParticipacion;
 use App\Models\ParticipacionDisciplina;
-use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\MaxWidth;
@@ -20,9 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
-use Livewire\Livewire;
 
 class IntencionParticipacionResource extends Resource
 {
@@ -35,14 +29,6 @@ class IntencionParticipacionResource extends Resource
     protected static bool $hasTitleCaseModelLabel = false;
 
     protected static ?string $slug = 'intencion-de-participacion';
-
-    /*public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
-    }*/
 
     public static int|null $id_entidad = null;
     public static string|null $nombre_entidad = null;
