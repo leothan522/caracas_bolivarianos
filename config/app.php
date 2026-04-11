@@ -159,4 +159,6 @@ return [
 
     'reportes_ver' => env('reportes_ver', true),
 
+    'widget_filament' => env('WIDGET_FILAMENT', false),
+
 ];

@@ -44,10 +44,10 @@ class DashboardPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->widgets([
+            ->widgets(array_filter([
                 Widgets\AccountWidget::class,
-                //Widgets\FilamentInfoWidget::class,
-            ])
+                config('app.widget_filament') ? Widgets\FilamentInfoWidget::class : null,
+            ]))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
