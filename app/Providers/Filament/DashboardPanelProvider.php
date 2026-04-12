@@ -66,7 +66,7 @@ class DashboardPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->profile(isSimple: false)
-            ->favicon(asset('img/favicons/favicon-96x96.png'))
+            ->favicon(asset('img/favicons/favicon-32x32.png'))
             ->plugins([
                /*FilamentEditProfilePlugin::make()
                     ->shouldRegisterNavigation(false)

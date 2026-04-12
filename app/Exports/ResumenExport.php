@@ -11,6 +11,12 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class ResumenExport implements FromView, WithTitle, ShouldAutoSize
 {
+    public int $proceso;
+    public function __construct($proceso)
+    {
+        $this->proceso = $proceso;
+    }
+
     /**
      * @return View
      */
@@ -24,6 +30,7 @@ class ResumenExport implements FromView, WithTitle, ShouldAutoSize
 
         return \view('export.intencion-resumen')
             ->with('i', 0)
+            ->with('proceso', $this->proceso)
             ->with('deportes', $deportes)
             ->with('clubes', $clubes)
             ->with('totalFemenino', 0)
@@ -32,7 +39,7 @@ class ResumenExport implements FromView, WithTitle, ShouldAutoSize
 
     public function title(): string
     {
-        return 'INTENCIÓN - NUMÉRICA';
+        return $this->proceso == 1 ? 'INTENCIÓN PARTICIPACIÓN' : 'INSCRIPCIÓN NUMÉRICA';
     }
 
 }

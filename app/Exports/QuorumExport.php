@@ -11,6 +11,11 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class QuorumExport implements FromView, WithTitle, ShouldAutoSize
 {
+    public int $proceso;
+    public function __construct($proceso)
+    {
+        $this->proceso = $proceso;
+    }
 
     /**
      * @return View
@@ -23,6 +28,7 @@ class QuorumExport implements FromView, WithTitle, ShouldAutoSize
 
         return \view('export.intencion-quorum')
             ->with('i', 0)
+            ->with('proceso', $this->proceso)
             ->with('deportes', $deportes)
             ->with('totalFemenino', 0)
             ->with('totalMasculino', 0);

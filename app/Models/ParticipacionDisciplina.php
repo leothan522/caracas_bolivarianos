@@ -9,6 +9,7 @@ class ParticipacionDisciplina extends Model
 {
     protected $table = 'participacion_intencion_disciplinas';
     protected $fillable = [
+        'proceso',
         'id_entidad',
         'id_deporte_oficial',
         'femenino',

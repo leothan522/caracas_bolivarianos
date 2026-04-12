@@ -6,6 +6,7 @@ use App\Filament\Resources\IntencionParticipacionResource\Pages;
 use App\Models\DeporteOficial;
 use App\Models\Entidad;
 use App\Models\ParticipacionDisciplina;
+use App\Traits\DeportesTrait;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -20,6 +21,8 @@ use Illuminate\Support\Str;
 
 class IntencionParticipacionResource extends Resource
 {
+    use DeportesTrait;
+
     protected static ?string $model = DeporteOficial::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
@@ -30,18 +33,13 @@ class IntencionParticipacionResource extends Resource
 
     protected static ?string $slug = 'intencion-de-participacion';
 
-    public static int|null $id_entidad = null;
-    public static string|null $nombre_entidad = null;
-
-    public static function table(Table $table): Table
+    public static function table(Table $table, $intencion = true): Table
     {
+        self::$intencionParticipacion = $intencion;
         self::filtrarEntidad();
         return $table
             ->query(function (): Builder {
-                $query = DeporteOficial::query();
-                return $query->select('deportes_oficiales.*')
-                    ->join('deportes', 'deportes.id', '=', 'deportes_oficiales.id_deporte')
-                    ->orderBy('deportes.deporte', 'asc')->orderBy('ordenar', 'asc');
+                return self::getQueryDeporteOficial();
             })
             ->heading('Deportes y Modalidades')
             ->description('Seleccione todas competiciones en las que su club desea competir')
@@ -128,6 +126,7 @@ class IntencionParticipacionResource extends Resource
                             if ($data['femenino'] || $data['masculino']) {
                                 if (!$intencion) {
                                     $intencion = new ParticipacionDisciplina();
+                                    $intencion->proceso = self::getProceso();
                                     $intencion->id_entidad = self::$id_entidad;
                                     $intencion->id_deporte_oficial = $record->id;
                                 }
@@ -168,7 +167,7 @@ class IntencionParticipacionResource extends Resource
                     ->hidden(self::ocultar()),
                 Tables\Actions\Action::make('imprimir')
                     ->label('Generar PDF')
-                    ->url(fn() => route('intencion.deporte', session('entidad_id', null)))
+                    ->url(fn() => route('intencion.deporte', [self::getProceso(), session('entidad_id')]))
                     ->disabled(empty(session('entidad_id')))
                     ->openUrlInNewTab(),
                 Tables\Actions\Action::make('actualizar')
@@ -227,6 +226,7 @@ class IntencionParticipacionResource extends Resource
     protected static function getParticipacion($record): ?ParticipacionDisciplina
     {
         return ParticipacionDisciplina::where('id_entidad', self::$id_entidad)
+            ->where('proceso', self::getProceso())
             ->where('id_deporte_oficial', $record->id)
             ->first();
     }

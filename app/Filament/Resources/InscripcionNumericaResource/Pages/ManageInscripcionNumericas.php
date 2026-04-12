@@ -1,28 +1,27 @@
 <?php
 
-namespace App\Filament\Resources\IntencionParticipacionResource\Pages;
+namespace App\Filament\Resources\InscripcionNumericaResource\Pages;
 
-use App\Filament\Resources\IntencionParticipacionResource;
+use App\Filament\Resources\InscripcionNumericaResource;
 use App\Traits\DeportesTrait;
-use Filament\Actions;
-use Filament\Actions\Action;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Contracts\Support\Htmlable;
 
-class ManageIntencionParticipacions extends ManageRecords
+class ManageInscripcionNumericas extends ManageRecords
 {
     use DeportesTrait;
 
-    protected static string $resource = IntencionParticipacionResource::class;
+    protected static string $resource = InscripcionNumericaResource::class;
 
     protected function getHeaderActions(): array
     {
+        $this->intencion = false;
         return $this->actionGenerarReporte();
     }
 
     public function getSubheading(): string|Htmlable|null
     {
+        $this->intencion = false;
         return $this->subHeader();
     }
-
 }

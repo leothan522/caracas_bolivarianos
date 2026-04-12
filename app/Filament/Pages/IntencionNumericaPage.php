@@ -11,14 +11,15 @@ class IntencionNumericaPage extends Page
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
     protected static string $view = 'filament.pages.intencion-numerica-page';
-    protected static ?string $title = "Inscripción Numérica";
+    protected static ?string $title = "OLD->Inscripción Numérica";
     protected static ?int $navigationSort = 2;
 
     public static function canAccess(): bool
     {
-        $id_nivel = auth()->user()->id_nivel ?? null;
+        return false;
+        /*$id_nivel = auth()->user()->id_nivel ?? null;
         $is_root = auth()->user()->is_root ?? null;
-        return verPage('NUMERICA_VER', 'NUMERICA_HASTA') || $id_nivel == 1 || $is_root;
+        return verPage('NUMERICA_VER', 'NUMERICA_HASTA') || $id_nivel == 1 || $is_root;*/
     }
 
     public function getSubheading(): string|Htmlable|null

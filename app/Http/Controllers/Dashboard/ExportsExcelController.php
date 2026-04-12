@@ -15,9 +15,10 @@ class ExportsExcelController extends Controller
      * @throws Exception
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
-    public function intencionParticipacion()
+    public function intencionParticipacion($proceso = 1)
     {
-        return Excel::download(new IntencionParticipacionExport(), 'RESUMEN_INTENCION_PARTICIPACION.xlsx');
+        $filename = $proceso == 1 ? 'RESUMEN_INTENCION_PARTICIPACION' : 'RESUMEN_INSCRIPCION_NUMERICA';
+        return Excel::download(new IntencionParticipacionExport($proceso), $filename.'.xlsx');
     }
 
     /**

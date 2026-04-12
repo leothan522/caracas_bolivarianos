@@ -10,6 +10,7 @@ class DeporteOficial extends Model
 {
     protected $table = 'deportes_oficiales';
     protected $fillable = [
+        'proceso',
         'id_deporte',
         'ordenar',
         'categoria',

@@ -16,14 +16,17 @@
     </thead>
     <tbody>
     @foreach($deportes as $row)
+        @if($row->proceso != $proceso)
+            @continue
+        @endif
         <tr>
             <td style="border: 1px solid #404040; vertical-align: center; text-align: center;">{{ ++$i }}</td>
             <td style="border: 1px solid #404040; vertical-align: center;">
                 {{ \Illuminate\Support\Str::upper($row->deporte->deporte) }} -
                 {{ \Illuminate\Support\Str::upper($row->categoria) }}</td>
             @php
-                $femenino = \App\Models\ParticipacionDisciplina::where('id_deporte_oficial', $row->id)->whereNotNull('femenino')->where('femenino', '!=', 0)->count();
-                $masculino = \App\Models\ParticipacionDisciplina::where('id_deporte_oficial', $row->id)->whereNotNull('masculino')->where('masculino', '!=', 0)->count();
+                $femenino = \App\Models\ParticipacionDisciplina::where('proceso', $proceso)->where('id_deporte_oficial', $row->id)->whereNotNull('femenino')->where('femenino', '!=', 0)->count();
+                $masculino = \App\Models\ParticipacionDisciplina::where('proceso', $proceso)->where('id_deporte_oficial', $row->id)->whereNotNull('masculino')->where('masculino', '!=', 0)->count();
                 $totalFemenino = $totalFemenino + $femenino;
                 $totalMasculino = $totalMasculino + $masculino;
                 $quorum_fem = $femenino < 4 ? 4 - $femenino : null;
