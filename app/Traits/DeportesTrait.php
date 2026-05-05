@@ -4,7 +4,9 @@ namespace App\Traits;
 
 use App\Models\DeporteOficial;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 
 trait DeportesTrait
 {
@@ -36,6 +38,21 @@ trait DeportesTrait
     {
         $proceso = $this->intencion ? 1 : 2;
         return [
+            Action::make('descargar_manuales')
+                ->label('Descargar Manuales Técnicos')
+                ->icon('heroicon-o-folder-arrow-down')
+                ->color('info')
+                ->action(function (){
+                    $filePath = 'manuales/Manuales_COBOLJ_Caracas_2026_pdf.zip';
+                    if (Storage::disk('public')->exists($filePath)){
+                        return Storage::disk('public')->download($filePath);
+                    }
+                    Notification::make()
+                        ->title('Error')
+                        ->body('El archivo de manuales no se encuentra en el servidor.')
+                        ->danger()
+                        ->send();
+                }),
             Action::make('generar_excel')
                 ->label('Generar Reporte')
                 ->icon('heroicon-o-document-arrow-down')

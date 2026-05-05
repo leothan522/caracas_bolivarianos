@@ -69,7 +69,7 @@ class UserResource extends Resource
                             ->searchable()
                             ->preload(),
                         Forms\Components\Toggle::make('validar_socios')
-                            ->hiddenOn('create'),
+                            /*->hiddenOn('create')*/,
                     ])
                     ->columns()
                     ->compact(),
