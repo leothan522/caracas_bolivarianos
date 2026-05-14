@@ -59,7 +59,7 @@ trait DeportesTrait
                 ->color('success')
                 ->url(route('excel-exports.intencion-participacion', $proceso))
                 ->openUrlInNewTab()
-                ->visible(fn(): bool => auth()->user()->id_nivel == 1 || auth()->user()->is_root),
+                ->visible(fn(): bool => auth()->user()->id_nivel == 1 || auth()->user()->id_nivel == 6 || auth()->user()->is_root),
         ];
     }
 

@@ -145,6 +145,7 @@ class IntencionParticipacionResource extends Resource
                                 ->send();
                         }
                     })
+					->disabled(fn(): bool => auth()->user()->id_nivel == 6)
             ], position: Tables\Enums\ActionsPosition::BeforeCells)
             ->headerActions([
                 Tables\Actions\Action::make('seleccionar_entidad')
@@ -168,7 +169,7 @@ class IntencionParticipacionResource extends Resource
                 Tables\Actions\Action::make('imprimir')
                     ->label('Generar PDF')
                     ->url(fn() => route('intencion.deporte', [self::getProceso(), session('entidad_id')]))
-                    ->disabled(empty(session('entidad_id')))
+                    ->disabled(fn():bool => empty(session('entidad_id')))
                     ->openUrlInNewTab(),
                 Tables\Actions\Action::make('actualizar')
                     ->iconButton()
@@ -217,7 +218,7 @@ class IntencionParticipacionResource extends Resource
         $response = true;
         $id_nivel = auth()->user()->id_nivel;
         $is_root = auth()->user()->is_root;
-        if ($id_nivel == 1 || $is_root) {
+        if ($id_nivel == 1 || $id_nivel == 6 || $is_root) {
             $response = false;
         }
         return $response;

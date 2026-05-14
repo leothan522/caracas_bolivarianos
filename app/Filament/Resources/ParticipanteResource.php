@@ -318,15 +318,16 @@ class ParticipanteResource extends Resource
                     ->wrap()
                     ->visibleFrom('sm'),
                 Tables\Columns\CheckboxColumn::make('asiste')
+					->disabled(fn(): bool => auth()->user()->id_nivel == 6)
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('entidad.short_nombre')
                     ->label('Club')
                     ->formatStateUsing(fn(string $state) => mb_strtoupper($state))
                     ->wrap()
                     ->hidden(function () {
-                        $id_nivel = auth()->user()->id_nivel;
+                        $id_nivel = auth()->user()->id_nivel == 1 || auth()->user()->id_nivel == 6;
                         $is_root = auth()->user()->is_root;
-                        if ($id_nivel != 1 && !$is_root) {
+                        if (!$id_nivel && !$is_root) {
                             return true;
                         }
                         return false;
@@ -344,9 +345,9 @@ class ParticipanteResource extends Resource
                     ->label('Club')
                     ->relationship('entidad', 'short_nombre')
                     ->hidden(function () {
-                        $id_nivel = auth()->user()->id_nivel;
+                        $id_nivel = auth()->user()->id_nivel == 1 || auth()->user()->id_nivel == 6;;
                         $is_root = auth()->user()->is_root;
-                        if ($id_nivel != 1 && !$is_root) {
+                        if (!$id_nivel && !$is_root) {
                             return true;
                         }
                         return false;
@@ -387,6 +388,8 @@ class ParticipanteResource extends Resource
                                 $record->update(['cedula' => $cedula]);
                             }
                         })
+						->disabled(fn(): bool => auth()->user()->id_nivel == 6)
+						->hidden(fn(): bool => auth()->user()->id_nivel == 6)
                 ]),
                 ExportBulkAction::make()->exports([
                     ExcelExport::make()->withColumns([
@@ -411,10 +414,10 @@ class ParticipanteResource extends Resource
             ])
             ->defaultSort('created_at', 'DESC')
             ->modifyQueryUsing(function (Builder $query) {
-                $id_nivel = auth()->user()->id_nivel;
+                $id_nivel = auth()->user()->id_nivel == 1 || auth()->user()->id_nivel == 6;
                 $id_entidad = auth()->user()->id_entidad;
                 $is_root = auth()->user()->is_root;
-                if ($id_nivel != 1 && !$is_root) {
+                if (!$id_nivel && !$is_root) {
                     return $query->where('id_entidad', $id_entidad);
                 }
             });
@@ -444,12 +447,12 @@ class ParticipanteResource extends Resource
         ];
     }
 
-    public static function canAccess(): bool
+    /* public static function canAccess(): bool
     {
         $id_nivel = auth()->user()->id_nivel ?? null;
         $is_root = auth()->user()->is_root ?? null;
         return verPage('PARTICIPANTES_VER', 'PARTICIPANTES_HASTA') || $id_nivel == 1 || $is_root;
-    }
+    }*/
 
 
 
