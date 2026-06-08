@@ -40,3 +40,9 @@ Route::get('export/modalidad/reportes/{id_entidad}/{filtro}/{id_modalidad}', [Ex
 
 Route::get('/export/excel/intencion-participacion/{proceso}', [ExportsExcelController::class, 'intencionParticipacion'])->name('excel-exports.intencion-participacion');
 Route::get('/export/excel/inscripcion-participacion', [ExportsExcelController::class, 'inscripcionNumerica'])->name('excel-exports.inscripcion-numerica');
+
+// Si alguien intenta entrar a /dashboard/logout por GET (ej. botón atrás),
+// simplemente redirígelo a la página de inicio o al login.
+Route::get('/dashboard/logout', function () {
+    return redirect()->route('login');
+});
