@@ -86,4 +86,19 @@ class Participante extends Model
         return $this->hasMany(Atleta::class, 'id_participante', 'id');
     }
 
+    protected static function booted(): void
+    {
+        static::updating(function ($participante) {
+            // 1. Verificamos si cambiaron específicamente estos campos en el modelo
+            $cambioFecha = $participante->isDirty('fecha_nacimiento');
+            $cambioSexo  = $participante->isDirty('sexo');
+            $cambioCargo = $participante->isDirty('id_cargo');
+
+            // 2. Solo si alguno de los tres cambió, ejecutamos el borrado directo
+            if ($cambioFecha || $cambioSexo || $cambioCargo) {
+                \App\Models\Atleta::where('id_participante', $participante->id)->delete();
+            }
+        });
+    }
+
 }

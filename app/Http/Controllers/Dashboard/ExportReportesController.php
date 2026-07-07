@@ -7,6 +7,7 @@ use App\Models\Entidad;
 use App\Models\Participante;
 use App\Traits\ReportesFpdf;
 use Codedge\Fpdf\Fpdf\Fpdf;
+use Illuminate\Database\Eloquent\Builder;
 
 class ExportReportesController extends Fpdf
 {
@@ -45,7 +46,16 @@ class ExportReportesController extends Fpdf
         }
 
         if (!empty($id_deporte)) {
-            $query->where('deporteini', $id_deporte);
+            //$query->where('deporteini', $id_deporte);
+            $query->whereHas('atletas', function (Builder $atletaQuery) use ($id_deporte) {
+                // Condición obligatoria: El deporte asociado al atleta debe estar en uso
+                $atletaQuery->whereHas('deporte', function (Builder $deporteQuery) {
+                    $deporteQuery->where('en_uso', 1);
+                });
+
+                // Si el componente tiene un deporte seleccionado, filtramos por ese ID específico
+                $atletaQuery->where('id_deporte', $id_deporte);
+            });
             $deporte = Deporte::find($id_deporte);
             if ($deporte) {
                 $_SESSION['headerTitle'] = 'Inscritos por Deporte';
@@ -80,7 +90,7 @@ class ExportReportesController extends Fpdf
             $pdf->Cell(30, 10, $this->getTotal($total), 0, 1, 'C');
             if (!empty($nameDeporte)) {
                 $w = $filtro != 'all' ? 130 : 190;
-                $pdf->Cell($w, 10, $this->getDeporte($nameDeporte), 0, 0, 'C');
+                $pdf->Cell($w, 10, verUtf8($this->getDeporte($nameDeporte)), 0, 0, 'C');
             }
             if ($filtro != 'all') {
                 $w = !empty($nameDeporte) ? 50 : 190;
@@ -148,7 +158,16 @@ class ExportReportesController extends Fpdf
         }
 
         if (!empty($id_deporte)) {
-            $query->where('deporteini', $id_deporte);
+            //$query->where('deporteini', $id_deporte);
+            $query->whereHas('atletas', function (Builder $atletaQuery) use ($id_deporte) {
+                // Condición obligatoria: El deporte asociado al atleta debe estar en uso
+                $atletaQuery->whereHas('deporte', function (Builder $deporteQuery) {
+                    $deporteQuery->where('en_uso', 1);
+                });
+
+                // Si el componente tiene un deporte seleccionado, filtramos por ese ID específico
+                $atletaQuery->where('id_deporte', $id_deporte);
+            });
             $deporte = Deporte::find($id_deporte);
             if ($deporte) {
                 $_SESSION['headerTitle'] = 'Inscritos por Deporte';
@@ -182,7 +201,7 @@ class ExportReportesController extends Fpdf
             $pdf->Cell(30, 10, $this->getTotal($total), 0, 1, 'C');
             if (!empty($nameDeporte)) {
                 $w = $filtro != 'all' ? 130 : 190;
-                $pdf->Cell($w, 10, $this->getDeporte($nameDeporte), 0, 0, 'C');
+                $pdf->Cell($w, 10, verUtf8($this->getDeporte($nameDeporte)), 0, 0, 'C');
             }
             if ($filtro != 'all') {
                 $w = !empty($nameDeporte) ? 50 : 190;

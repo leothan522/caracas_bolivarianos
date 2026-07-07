@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Atleta;
 use App\Models\Entidad;
 use App\Models\Participante;
 use Filament\Forms\Components\Select;
@@ -141,18 +142,46 @@ class ReporteGeneralInfolistComponent extends Component implements HasForms, Has
 
     protected function getInscritos(): int
     {
-        $participantes = Participante::query();
-        if ($this->id_deporte) {
-            $participantes->where('deporteini', $this->id_deporte);
-        }
         $id_nivel = auth()->user()->id_nivel;
         $id_entidad = auth()->user()->id_entidad;
         $is_root = auth()->user()->is_root;
-        if ($id_nivel != 1 && !$is_root) {
-            $participantes->where('id_entidad', $id_entidad);
+
+        // Filtramos directamente por el ID del deporte en la tabla atletas
+        if ($this->id_deporte) {
+
+
+            //Para los inscritos por Deporte
+            // Cambiamos el inicio de la consulta al modelo Atleta
+            $atletas = Atleta::query();
+            $atletas->where('id_deporte', $this->id_deporte);
+            // Los filtros de usuario pertenecen al Participante,
+            // así que los aplicamos a través de la relación 'participante'
+            if ($id_nivel != 1 && !$is_root) {
+                $atletas->whereHas('participante', function ($query) use ($id_entidad) {
+                    $query->where('id_entidad', $id_entidad);
+                });
+            }
+
+            // Verificamos que el deporte relacionado esté en uso
+            $atletas->whereRelation('deporte', 'en_uso', 1);
+            return $atletas->distinct()->count('id_participante');
+
+
+        }else{
+            // Para el reporte General: Contar atletas únicos con filtros de entidad y deporte en uso
+            $participantes = Participante::query();
+            if ($id_nivel != 1 && !$is_root) {
+                $participantes->where('id_entidad', $id_entidad);
+            }
+            $participantes->whereRelation('deporteinicial', 'en_uso', 1);
+            return $participantes->count();
         }
-        $participantes->whereRelation('deporteinicial', 'en_uso', 1);
-        return $participantes->count();
+
+
+
+
+
+
     }
 
 }

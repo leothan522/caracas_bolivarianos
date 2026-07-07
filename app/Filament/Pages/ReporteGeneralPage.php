@@ -14,7 +14,7 @@ class ReporteGeneralPage extends Page
 
     public static function canAccess(): bool
     {
-        return false;
+        return true;
     }
 
 }

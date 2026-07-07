@@ -25,10 +25,16 @@ class IntencionInfolistComponent extends Component implements HasForms, HasInfol
     public string $nombre_entidad;
     public bool $intencionDeporte;
 
-    public function mount($tablaDeporte = false)
+    public bool $intencion;
+
+    public int $proceso;
+
+    public function mount($tablaDeporte = false, $intencion = true)
     {
         $this->filtrarEntidad();
         $this->intencionDeporte = $tablaDeporte;
+        $this->intencion = $intencion;
+        $this->proceso = $this->intencion ? 1 : 2;
     }
 
     public function render()
@@ -51,7 +57,8 @@ class IntencionInfolistComponent extends Component implements HasForms, HasInfol
                                 ->key('foo-first')
                             :
                             Livewire::make(IntencionDeporteTableComponent::class, [
-                                'id_entidad' => $this->id_entidad ?? null
+                                'id_entidad' => $this->id_entidad ?? null,
+                                'intencion' => $this->intencion
                             ])
                                 ->key('foo-three'),
                     ]))
@@ -77,7 +84,7 @@ class IntencionInfolistComponent extends Component implements HasForms, HasInfol
                             ->label('Generar PDF')
                             ->url(fn(): string => !$this->intencionDeporte ?
                                 route('intencion.participacion', $this->id_entidad ?? null) :
-                                route('intencion.deporte', $this->id_entidad ?? null)
+                                route('intencion.deporte', [$this->proceso, $this->id_entidad ?? null])
                             )
                             ->disabled(!isset($this->id_entidad))
                             ->openUrlInNewTab()

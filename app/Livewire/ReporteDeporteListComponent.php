@@ -16,7 +16,7 @@ class ReporteDeporteListComponent extends Component
 
     public function render()
     {
-        $deportes = Deporte::where('en_uso', 1)->get();
+        $deportes = Deporte::where('en_uso', 1)->has('atletas')->get();
         return view('livewire.reporte-deporte-list-component')
             ->with('listarDeportes', $deportes);
     }

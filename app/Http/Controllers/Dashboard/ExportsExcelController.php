@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Exports\InscripcionNumericaExport;
 use App\Exports\IntencionParticipacionExport;
+use App\Exports\ParticipantesExport;
+use App\Exports\QuorumParticipantes;
+use App\Exports\ResumenParticipantes;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -28,5 +31,14 @@ class ExportsExcelController extends Controller
     public function inscripcionNumerica()
     {
         return Excel::download(new InscripcionNumericaExport(), 'RESUMEN_INSCRIPCION_NUMERICA.xlsx');
+    }
+
+    /**
+     * @throws Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function participantes()
+    {
+        return Excel::download(new ParticipantesExport(), 'RESUMEN_PARTICIPANTES.xlsx');
     }
 }

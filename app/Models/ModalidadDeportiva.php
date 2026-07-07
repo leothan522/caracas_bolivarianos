@@ -27,6 +27,8 @@ class ModalidadDeportiva extends Model
         'IdModalAccess',
         'IdCategAccess',
         'Orden',
+        'minimo',
+        'maximo',
     ];
 
     public function deporte(): BelongsTo

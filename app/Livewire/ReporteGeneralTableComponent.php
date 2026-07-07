@@ -42,18 +42,35 @@ class ReporteGeneralTableComponent extends Component implements HasForms, HasTab
         return $table
             ->query(Participante::query())
             ->modifyQueryUsing(function (Builder $query) {
+                // 1. Filtro opcional por entidad del componente
                 if ($this->filtrar_entidad) {
                     $query->where('id_entidad', $this->id_entidad);
                 }
+
                 if ($this->id_deporte){
-                    $query->where('deporteini', $this->id_deporte);
+                    //$query->where('deporteini', $this->id_deporte);
+                    // 2. Filtramos la tabla participantes basándonos en sus registros de la tabla atletas
+                    $query->whereHas('atletas', function (Builder $atletaQuery) {
+                        // Condición obligatoria: El deporte asociado al atleta debe estar en uso
+                        $atletaQuery->whereHas('deporte', function (Builder $deporteQuery) {
+                            $deporteQuery->where('en_uso', 1);
+                        });
+
+                        // Si el componente tiene un deporte seleccionado, filtramos por ese ID específico
+                        $atletaQuery->where('id_deporte', $this->id_deporte);
+                    });
+
+
+                }else{
+                    $query->whereRelation('deporteinicial', 'en_uso', 1);
                 }
-                $query->whereRelation('deporteinicial', 'en_uso', 1);
+
                 return $query;
             })
             ->columns([
                 TextColumn::make('cedula')
-                    ->numeric(),
+                    ->numeric()
+                    ->searchable(),
                 TextColumn::make('primer_nombre')
                     ->label('Nombre Completo')
                     ->formatStateUsing(function ($state, Participante $participante) {
@@ -95,6 +112,30 @@ class ReporteGeneralTableComponent extends Component implements HasForms, HasTab
                         }
                         return false;
                     }),
+                SelectFilter::make('Cargo')
+                    ->relationship('cargo', 'cargo', function (Builder $query) {
+                        // 1. Obtener el usuario autenticado con sus relaciones cargadas
+                        $user = auth()->user()?->load('nivel.permiso');
+
+                        // 2. Si no hay usuario o no tiene permisos asignados, vaciamos el select por seguridad
+                        if (!$user || !$user->nivel || !$user->nivel->permiso || empty($user->nivel->permiso->cargos)) {
+                            return $query->whereRaw('1 = 0'); // Consulta que devuelve vacío
+                        }
+
+                        // 3. Limpiamos el string ("1, 2, , 3") y lo convertimos en un array limpio: [1, 2, 3]
+                        $cargoIds = array_filter(
+                            array_map('trim', explode(',', $user->nivel->permiso->cargos))
+                        );
+
+                        // Si después de limpiar el array quedó vacío, no mostramos nada
+                        if (empty($cargoIds)) {
+                            return $query->whereRaw('1 = 0');
+                        }
+
+                        // 4. Filtramos el listado del SELECT para que solo muestre esos IDs
+                        return $query->whereIn('id', $cargoIds);
+                    })
+                    ->hidden($this->id_deporte)
             ])
             ->queryStringIdentifier($this->texto);
     }

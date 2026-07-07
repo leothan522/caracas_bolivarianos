@@ -26,10 +26,14 @@ class IntencionDeporteTableComponent extends Component implements HasForms, HasT
     use InteractsWithForms;
 
     public $id_entidad;
+    public bool $intencion;
+    public int $proceso;
 
-    public function mount($id_entidad)
+    public function mount($id_entidad, $intencion = true)
     {
         $this->id_entidad = $id_entidad;
+        $this->intencion = $intencion;
+        $this->proceso = $this->intencion ? 1 : 2;
     }
 
     public function render()
@@ -42,6 +46,7 @@ class IntencionDeporteTableComponent extends Component implements HasForms, HasT
         return $table
             ->query(function () {
                 $query = DeporteOficial::query();
+                $query->where('proceso', $this->proceso);
                 return $query->select('deportes_oficiales.*')
                     ->join('deportes', 'deportes.id', '=', 'deportes_oficiales.id_deporte')
                     ->orderBy('deportes.deporte', 'asc')->orderBy('ordenar', 'asc');
@@ -129,6 +134,7 @@ class IntencionDeporteTableComponent extends Component implements HasForms, HasT
                             if ($data['femenino'] || $data['masculino']) {
                                 if (!$intencion) {
                                     $intencion = new ParticipacionDisciplina();
+                                    $intencion->proceso = $this->proceso;
                                     $intencion->id_entidad = $this->id_entidad;
                                     $intencion->id_deporte_oficial = $record->id;
                                 }
@@ -154,6 +160,7 @@ class IntencionDeporteTableComponent extends Component implements HasForms, HasT
     {
         return ParticipacionDisciplina::where('id_entidad', $this->id_entidad)
             ->where('id_deporte_oficial', $record->id)
+            ->where('proceso', $this->proceso)
             ->first();
     }
 
